@@ -6,7 +6,7 @@ class BatchReader(object):
     def __init__(self, batch_size, iterator=None, file_path=""):
         
         if file_path != "":
-            self.iterator = open(file_path, "r")
+            self.iterator = open(file_path, "rb")
         else:
             assert iterator is not None, "Iterator cannot be None"
             self.iterator= iterator
@@ -17,10 +17,10 @@ class BatchReader(object):
         return self.next()
 
     def next(self):
-        yield self.__batch(self.iterator, self.batch_size)
+        return self.__batch(self.iterator, self.batch_size)
     
 
-    def __batch(self,iterable, size):
+    def __batch(self, iterator, size):
         """Gets items in batches from a sequence/iterable
         
         Args:
@@ -34,7 +34,7 @@ class BatchReader(object):
 
         """
 
-        sourceiter = iter(iterable)
+        sourceiter = iter(iterator)
         while True:
             batchiter = islice(sourceiter, size)
             yield chain([batchiter.next()], batchiter)
