@@ -21,11 +21,13 @@ class OutputDir(Output):
     def __init__(self, name, path):
         Output.__init__(self, name, path)
 
-    def create(self, remove_existing= True):
+    def init(self, remove_existing= False, create=True):
         if self.exists:
             if remove_existing:
                 shutil.rmtree(self.path) 
-        os.makedirs(self.path)
+
+        if create:
+            os.makedirs(self.path)
 
 
 class OutputFile(Output):
@@ -70,11 +72,11 @@ class OutputProvider(object):
             
             if "tmp" in name:
                 o_dir= OutputDir(name.replace("_dir", ""), path)
-
+                o_dir.init(remove_existing= True, create= False)        
             else:
                 o_dir= OutputDir(name.replace("_dir", ""), path)
-                o_dir.create()
-                
+                o_dir.init(remove_existing=False, create=True)
+            
             self.__dict__.update({name: o_dir}) 
 
     def __init_files(self):
