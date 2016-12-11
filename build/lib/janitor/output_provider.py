@@ -69,13 +69,17 @@ class OutputProvider(object):
 
     def __init_dirs(self):
         for name, path in self.dir_paths.iteritems():
+           
+            o_dir= OutputDir(name, path)
             
             if "tmp" in name:
-                o_dir= OutputDir(name.replace("_dir", ""), path)
                 o_dir.init(remove_existing= True, create= False)        
-            else:
-                o_dir= OutputDir(name.replace("_dir", ""), path)
-                o_dir.init(remove_existing=False, create=True)
+            
+            elif "ref" in name:
+                o_dir.init(remove_existing= False, create= False)
+            
+            else:    
+                o_dir.init(remove_existing= True, create=True)
             
             self.__dict__.update({name: o_dir}) 
 
